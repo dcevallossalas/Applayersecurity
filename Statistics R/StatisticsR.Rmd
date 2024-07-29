@@ -1,0 +1,276 @@
+---
+title: "Application Layer Security for Internet Communications: A Comprehensive Review, Challenges , and Future Trends"
+author: David Cevallos-Salas,José Estrada-Jiménez,Danny Guamán
+output: html_notebook
+---
+
+```{r}
+library(sur)
+library(ggplot2)
+library(ggpubr)
+library(readxl)
+library(viridis)
+palette <- viridis(4, alpha= 1, begin = 0.3, end = 0.8, direction = 1, option="viridis")
+
+palette1 <- viridis(29, alpha= 1, begin = 0.1, end = 0.9, direction = 1, option="viridis")
+palette2 <- viridis(2, alpha= 1, begin = 0.5, end = 0.8, direction = 1, option="viridis")
+palette3 <- viridis(3, alpha= 1, begin = 0.5, end = 0.8, direction = 1, option="viridis")
+palette4 <- viridis(8, alpha= 1, begin = 0.1, end = 0.9, direction = 1, option="viridis")
+palette5 <- viridis(13, alpha= 1, begin = 0.1, end = 0.9, direction = 1, option="viridis")
+palette6 <- viridis(4, alpha= 1, begin = 0.1, end = 0.9, direction = 1, option="viridis")
+```
+
+
+```{r}
+# Reading bibliography from Excel file
+Bibliography <- read_excel("C:/Users/DELL/Desktop/SALP-Complete/Bibliography.xlsx", sheet = "Bibliography", skip=3)
+
+View(Bibliography)
+```
+
+
+```{r}
+# Contributions by Publication year
+dfYears = as.data.frame.table(table(Bibliography$YEAR))
+dfYears
+plotYears = ggplot(data=dfYears, aes(x=Var1, y=Freq)) +
+  geom_bar(stat="identity", fill=palette1)+
+  geom_text(aes(label=Freq), vjust=-0.5, hjust=0.5, color="black", size=5)+
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))+
+  labs(title = "", x = "Year of publication", y = "No. of contributions")+
+  scale_y_continuous(limits=c(0,30))+
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 15), 
+    axis.text.y = element_text(size = 15),
+    axis.title.x = element_text(size = 15),
+    axis.title.y = element_text(size = 15))
+plotYears
+
+```
+
+```{r}
+# Contributions by Type of Application layer protocol
+dfProtocols = as.data.frame.table(table(Bibliography$PROTOCOL))
+dfProtocols
+plotProtocols = ggplot(data=dfProtocols, aes(x=Var1, y=Freq)) +
+  geom_bar(stat="identity", fill=palette2)+
+  geom_text(aes(label=Freq), vjust=-0.5, hjust=0.5, color="black", size=8)+
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))+
+  labs(title = "", x = "Type of Application layer protocol", y = "No. of contributions")+
+  scale_y_continuous(limits=c(0,150))+
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 20), 
+    axis.text.y = element_text(size = 20),
+    axis.title.x = element_text(size = 20),
+    axis.title.y = element_text(size = 20))
+plotProtocols
+
+```
+
+```{r}
+# Contributions by Approaches to security provision
+dfApproaches = as.data.frame.table(table(Bibliography$APPROACH))
+dfApproaches
+plotApproaches = ggplot(data=dfApproaches, aes(x=Var1, y=Freq)) +
+  geom_bar(stat="identity", fill=palette3)+
+  geom_text(aes(label=Freq), vjust=-0.5, hjust=0.5, color="black", size=9)+
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))+
+  labs(title = "", x = "Approach to security provision", y = "No. of contributions")+
+  scale_y_continuous(limits=c(0,200))+
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 22), 
+    axis.text.y = element_text(size = 22),
+    axis.title.x = element_text(size = 22),
+    axis.title.y = element_text(size = 22))
+plotApproaches
+```
+
+
+
+
+```{r}
+# Contributions by Security goals
+Var1 = factor(Bibliography$SECURITY_GOAL,levels=c("Confidentiality","Privacy","Integrity","Availability","Authentication","Authorization","Non-repudiation","Accounting"), ordered = T)
+
+dfGoals = as.data.frame.table(table(Var1))
+dfGoals
+plotGoals = ggplot(data=dfGoals, aes(x=Var1, y=Freq)) +
+  geom_bar(stat="identity", fill=palette4)+
+  geom_text(aes(label=Freq), vjust=-0.5, hjust=0.5, color="black", size=9)+
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))+
+  labs(title = "", x = "Security goal", y = "No. of contributions")+
+  scale_y_continuous(limits=c(0,100))+
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 22), 
+    axis.text.y = element_text(size = 22),
+    axis.title.x = element_text(size = 22),
+    axis.title.y = element_text(size = 22))
+plotGoals
+```
+
+
+
+```{r}
+# Contributions by Type of attack
+Var1 = factor(Bibliography$ATTACK_TYPE,levels=c("Initial access", "Execution", "Persistence", "Privilege escalation", "Defense evasion", "Credential access", "Lateral movement", "Collection", "Command and Control", "Exfiltration", "Impact", "Network effects", "Remote service effects"), ordered = T)
+
+dfAttacks = as.data.frame.table(table(Var1))
+dfAttacks
+plotAttacks = ggplot(data=dfAttacks, aes(x=Var1, y=Freq)) +
+  geom_bar(stat="identity", fill=palette5)+
+  geom_text(aes(label=Freq), vjust=-0.5, hjust=0.5, color="black", size=9)+
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))+
+  labs(title = "", x = "Type of attack", y = "No. of contributions")+
+  scale_y_continuous(limits=c(0,50))+
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 22), 
+    axis.text.y = element_text(size = 22),
+    axis.title.x = element_text(size = 22),
+    axis.title.y = element_text(size = 22))
+plotAttacks
+```
+
+
+```{r}
+# Contributions by Type of control
+Var1 = factor(Bibliography$CONTROL_TYPE,levels=c("Detection", "Protection", "Response", "Recovery"), ordered = T)
+
+dfControls = as.data.frame.table(table(Var1))
+dfControls
+plotControls = ggplot(data=dfControls, aes(x=Var1, y=Freq)) +
+  geom_bar(stat="identity", fill=palette6)+
+  geom_text(aes(label=Freq), vjust=-0.5, hjust=0.5, color="black", size=9)+
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))+
+  labs(title = "", x = "Type of control", y = "No. of contributions")+
+  scale_y_continuous(limits=c(0,150))+
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 22), 
+    axis.text.y = element_text(size = 22),
+    axis.title.x = element_text(size = 22),
+    axis.title.y = element_text(size = 22))
+plotControls
+```
+
+```{r}
+# Contributions by Broad domain
+Var1 = factor(Bibliography$BROAD_DOMAIN,c("Enterprise", "Mobile", "Industrial Control Systems"), labels=c("Enterprise", "Mobile", "ICS"),ordered = T)
+
+dfDomains = as.data.frame.table(table(Var1))
+dfDomains
+plotDomains = ggplot(data=dfDomains, aes(x=Var1, y=Freq)) +
+  geom_bar(stat="identity", fill=palette3)+
+  geom_text(aes(label=Freq), vjust=-0.5, hjust=0.5, color="black", size=9)+
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))+
+  labs(title = "", x = "Broad domain", y = "No. of contributions")+
+  scale_y_continuous(limits=c(0,125))+
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 22), 
+    axis.text.y = element_text(size = 22),
+    axis.title.x = element_text(size = 22),
+    axis.title.y = element_text(size = 22))
+plotDomains
+```
+```{r}
+# Type of attacks vs Type of control
+dfAC = as.data.frame.table(table(Bibliography$ATTACK_TYPE,Bibliography$CONTROL_TYPE))
+
+df = data.frame(
+  "X" = dfAC$Var2,
+  "Y" = dfAC$Var1,
+  #"Class" = c(rep("Types of controls",nrow(dfAC))),
+  "Freq" = dfAC$Freq
+)
+
+df$X = factor(df$X,levels=c("Detection", "Protection", "Response", "Recovery"))
+df$Y = factor(df$Y,levels=c("Initial access", "Execution", "Persistence", "Privilege escalation", "Defense evasion", "Credential access", "Lateral movement", "Collection", "Command and Control", "Exfiltration", "Impact", "Network effects", "Remote service effects"))
+
+df$Y = factor(df$Y,levels=c("Remote service effects","Network effects","Impact","Exfiltration","Command and Control","Collection","Lateral movement","Credential access","Defense evasion","Privilege escalation","Persistence","Execution","Initial access"))
+
+heatmap = ggplot(df, aes(x = X, y = Y, fill=Freq)) +
+geom_tile(color = "black") +
+geom_text(aes(label = Freq), color = "white", size = 8) +
+labs(fill = "Contributions", x="Type of control", y ="Type of attack")+
+#facet_grid(~ Class, scales = "free_x", switch = "y", labeller = label_wrap_gen(width = 15))+
+theme(axis.text.x = element_text(angle = 90, hjust = 1),strip.text = element_text(size = 12,face="bold"))+
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 22), 
+    axis.text.y = element_text(size = 22),
+    axis.title.x = element_text(size = 22),
+    axis.title.y = element_text(size = 22))+
+  theme(legend.position="none")
+
+heatmap
+```
+
+```{r}
+# Domains by Approach to security provision, Security goal and Type of control 
+dfBD_AP = as.data.frame.table(table(Bibliography$BROAD_DOMAIN,Bibliography$APPROACH))
+
+dfBD_SG = as.data.frame.table(table(Bibliography$BROAD_DOMAIN,Bibliography$SECURITY_GOAL))
+
+dfBD_CT = as.data.frame.table(table(Bibliography$BROAD_DOMAIN,Bibliography$CONTROL_TYPE))
+
+
+df = data.frame(
+  "X" = c(dfBD_AP$Var2,dfBD_SG$Var2,dfBD_CT$Var2),
+  "Y" = c(dfBD_AP$Var1,dfBD_SG$Var1,dfBD_CT$Var1),
+  "Class" = c(rep("Approach to security provision",nrow(dfBD_AP)),rep("Security goal",nrow(dfBD_SG)),rep("Type of control",nrow(dfBD_CT))),
+  "Freq" =  c(dfBD_AP$Freq,dfBD_SG$Freq,dfBD_CT$Freq)
+)
+
+df$X = factor(df$X,levels=c("Built-in", "Dependent", "Hybrid", "Confidentiality","Privacy","Integrity","Availability","Authentication","Authorization","Non-repudiation","Accounting","Detection", "Protection", "Response", "Recovery"))
+df$Y = factor(df$Y,levels=c("Industrial Control Systems","Mobile","Enterprise"),labels=c("ICS","Mobile","Enterprise"))
+df$Class = factor(df$Class,levels=c("Approach to security provision", "Security goal", "Type of control"))
+
+# scale_size(name = "Number of papers", range = c(8, 15))+
+bubbles = ggplot(df, aes(x = X, y = Y, size = Freq, color=X)) +
+  geom_point(data = subset(df, Freq > 0), aes(size = Freq)) +
+  geom_text(aes(label = ifelse(Freq>0,Freq,"")), color = "white", size = 6.5) +
+  scale_size(guide="none",range = c(8, 25))+
+  labs(x="", y="Broad domain")+
+  scale_colour_discrete(guide = "none",expand=c(0.1,0))+
+facet_grid(~ Class, scales = "free_x", switch = "y", labeller = label_wrap_gen(width = 25))+
+theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 22), 
+    axis.text.y = element_text(size = 22),
+    axis.title.x = element_text(size = 22),
+    axis.title.y = element_text(size = 22),
+    strip.text = element_text(size = 22, face = "bold"))
+bubbles
+```
+
+```{r}
+# Types of Application layer protocols by year
+dfALP_Y = as.data.frame.table(table(Bibliography$PROTOCOL,Bibliography$YEAR))
+
+dfALP_YY = as.data.frame.table(table(Bibliography$YEAR))
+
+df = data.frame(
+  "X" = dfALP_Y$Var2,
+  "Y" = dfALP_Y$Var1,
+  "Freq" =  dfALP_Y$Freq
+)
+
+# scale_size(name = "Number of papers", range = c(8, 15))+
+bubblesYears = ggplot(df, aes(x = X, y = Y, size = Freq, color=X)) +
+  geom_point(data = subset(df, Freq > 0), aes(size = Freq)) +
+  geom_text(aes(label = ifelse(Freq>0,Freq,"")), color = "white", size = 4.5) +
+  scale_size(guide="none",range = c(8, 25))+
+  labs(x="Year of publication", y="Type of Application layer protocol")+
+  scale_colour_discrete(guide = "none",expand=c(0.1,0))+
+#facet_grid(~ Class, scales = "free_x", switch = "y", labeller = label_wrap_gen(width = 25))+
+theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 14), 
+    axis.text.y = element_text(size = 14),
+    axis.title.x = element_text(size = 14),
+    axis.title.y = element_text(size = 14),
+    strip.text = element_text(size = 14, face = "bold"))
+bubblesYears
+
+plotDoubleYears = ggplot(data=df, aes(fill=Y, y=Freq, x=X)) + 
+    geom_bar(position="stack", stat="identity")+
+    geom_text(aes(label = ifelse((Freq > 0), Freq, "")), size = ifelse((df$Freq > 3), 5, 3.5), position = position_stack(vjust = 0.5))+
+    geom_text(aes(Var1, Freq, label = Freq, fill = NULL), data = dfALP_YY, vjust=-0.5, hjust=0.5, color="black", size=5, fontface = "bold")+
+    labs(x = "Year of publication", y = "No. of contributions", fill = "Type of Application layer protocol")+
+scale_fill_manual(values = palette2)+
+   scale_y_continuous(limits=c(0,30))+
+      theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 15), 
+    axis.text.y = element_text(size = 15),
+    axis.title.x = element_text(size = 15),
+    axis.title.y = element_text(size = 15),
+    legend.title = element_text(size = 15),
+    legend.text = element_text(size = 15))+
+  theme(legend.position="bottom")
+
+plotDoubleYears
+```
